@@ -1,4 +1,4 @@
-part of '../routes.dart';
+part of '../app_router.dart';
 
 final _convertRoutes = StatefulShellBranch(
   routes: [

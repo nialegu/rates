@@ -1,44 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/constants/prefs_string_constants.dart';
 import '../data/constants/routing_string_constants.dart';
 import '../presentation/core/screens/loader_screen.dart';
 import '../presentation/core/screens/root_screen.dart';
 import '../presentation/features/authorization/authorization_screen.dart';
 
+part 'base_routes/auth_routes.dart';
+part 'base_routes/loader_routes.dart';
 part 'navigation_bar_routes/rates_routes.dart';
 part 'navigation_bar_routes/convert_routes.dart';
-part 'loader_route.dart';
 
-final router = GoRouter(
-  // TODO
-  // navigatorKey: rootNavigatorKey,
-  initialLocation: RoutingStringConstants.authPath,
-  // TODO
-  redirect: (context, state) {
-    return null;
-  },
-  routes: [
-    GoRoute(
-      path: RoutingStringConstants.authPath,
-      name: RoutingStringConstants.authName,
-      pageBuilder: (context, state) => _buildPageWithDefaultTransition(
-        context: context,
-        state: state,
-        child: AuthorizationScreen(),
-      ),
-    ),
-    _loader,
-    StatefulShellRoute.indexedStack(
-      builder: (context, state, navigationShell) =>
-          RootScreen(navigationShell: navigationShell),
-      branches: [
-        _ratesRoutes,
-        _convertRoutes,
-      ],
-    )
-  ],
-);
+class AppRouter {
+  final SharedPreferences prefs;
+
+  AppRouter({required this.prefs});
+
+  late final router = GoRouter(
+    initialLocation: RoutingStringConstants.authPath,
+    routes: [
+      _authRoutes(prefs),
+      _loaderRoutes,
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            RootScreen(navigationShell: navigationShell),
+        branches: [
+          _ratesRoutes,
+          _convertRoutes,
+        ],
+      )
+    ],
+  );
+}
 
 CustomTransitionPage _buildPageWithDefaultTransition<T>({
   required BuildContext context,
