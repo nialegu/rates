@@ -5,12 +5,13 @@ class Rate {
   final String type;
   final String rateUsd;
 
-  Rate(
-      {required this.id,
-      required this.symbol,
-      required this.currencySymbol,
-      required this.type,
-      required this.rateUsd});
+  Rate({
+    required this.id,
+    required this.symbol,
+    required this.currencySymbol,
+    required this.type,
+    required this.rateUsd,
+  });
 
   factory Rate.fromJson(Map<String, dynamic> json) => Rate(
         id: json['id'],
@@ -19,4 +20,10 @@ class Rate {
         type: json['type'],
         rateUsd: json['rateUsd'],
       );
+
+  // TODO find any resourses to pull logos
+  String get imagePath => "https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png";
+  String get alternateImagePath => "https://cryptologos.cc/logos/thumbs/$id.png";
+
+  String get shortCourseUsd => rateUsd.substring(0, 12);
 }

@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../data/constants/routing_string_constants.dart';
-import '../../core/screens/loader.dart';
+import '../../core/screens/loader_screen.dart';
 import '../../core/utils/app_colors.dart';
-import '../authorization/bloc/authorization_bloc.dart';
+import '../../core/widgets/logout_button.dart';
 import 'bloc/rates_bloc.dart';
 import 'widgets/rate_tile.dart';
 
@@ -51,27 +49,9 @@ class RatesScreen extends StatelessWidget {
               ),
               centerTitle: true,
               title: const Text("Rates"),
-              actions: [
-                BlocListener<AuthorizationBloc, AuthorizationState>(
-                  listener: (context, state) {
-                    state.whenOrNull(
-                      notLoggedIn: () {
-                        context.read<RatesBloc>().pauseStream();
-                        return context
-                            .pushNamed(RoutingStringConstants.authName);
-                      },
-                    );
-                  },
-                  child: IconButton(
-                    icon: const Icon(Icons.exit_to_app_rounded),
-                    onPressed: () {
-                      context
-                          .read<AuthorizationBloc>()
-                          .add(const AuthorizationEvent.loggingOut());
-                    },
-                  ),
-                ),
-                const SizedBox(width: 5),
+              actions: const [
+                LogoutButton(),
+                SizedBox(width: 5),
               ],
             ),
           )
@@ -79,7 +59,7 @@ class RatesScreen extends StatelessWidget {
         body: BlocBuilder<RatesBloc, RatesState>(
           builder: (context, state) {
             return state.maybeWhen(
-              loading: () => const Loader(),
+              loading: () => const LoaderScreen(),
               orElse: () => ListView.separated(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 separatorBuilder: (context, index) => const Divider(
