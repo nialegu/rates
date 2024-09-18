@@ -38,7 +38,13 @@ class AppRouter {
           }
           final ratesBloc = context.read<RatesBloc>();
           return ratesBloc.state.maybeWhen(
-            canPushRatesPage: (_) => RoutingStringConstants.ratesPath,
+            initial: (rates) {
+              if (rates.isEmpty) {
+                ratesBloc.add(const RatesEvent.started());
+                return RoutingStringConstants.loaderPath;
+              }
+              return null;
+            },
             orElse: () {
               ratesBloc.add(const RatesEvent.started());
               return RoutingStringConstants.loaderPath;

@@ -1,18 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '/services/auth_service.dart';
+import '../../../../repositories/auth_repository.dart';
 
 part 'authorization_event.dart';
 part 'authorization_state.dart';
 part 'authorization_bloc.freezed.dart';
 
 class AuthorizationBloc extends Bloc<AuthorizationEvent, AuthorizationState> {
-  final AuthService _authService = AuthService();
-  final TextEditingController emailTextController = TextEditingController();
-  final TextEditingController passwordTextController = TextEditingController();
+  final AuthRepository _authService = AuthRepository();
 
   AuthorizationBloc() : super(const _Initial()) {
     on<AuthorizationEvent>(_onEvent);
