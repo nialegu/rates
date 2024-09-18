@@ -4,6 +4,8 @@ part of 'rates_bloc.dart';
 class RatesEvent with _$RatesEvent {
   const factory RatesEvent.started() = _Started;
 
+  const factory RatesEvent.reloadStarted() =_ReloadStarted;
+
   const factory RatesEvent.update() = _Update;
 
   const factory RatesEvent.forceUpdate() = _ForceUpdate;

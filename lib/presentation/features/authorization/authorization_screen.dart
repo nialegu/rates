@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../rates/bloc/rates_bloc.dart';
 import '/data/constants/routing_string_constants.dart';
 import '../../core/widgets/app_text_field.dart';
 import 'bloc/authorization_bloc.dart';
@@ -17,7 +18,14 @@ class AuthorizationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthorizationBloc, AuthorizationState>(
       listener: (context, state) => state.whenOrNull(
-        loggedIn: () => context.goNamed(RoutingStringConstants.ratesName),
+        loggedIn: () {
+          if (context.canPop()) {
+            context.read<RatesBloc>().resumeStream();
+            return context.pop();
+          } else {
+            return context.goNamed(RoutingStringConstants.ratesName);
+          }
+        },
       ),
       child: Scaffold(
         body: SafeArea(

@@ -29,7 +29,8 @@ class Application extends StatelessWidget {
       child: BlocListener<RatesBloc, RatesState>(
         listener: (context, state) {
           state.whenOrNull(
-            initial: (_) => router.pushReplacementNamed(RoutingStringConstants.ratesName),
+            initial: (_) => router
+                  .pushReplacementNamed(RoutingStringConstants.ratesName),
           );
         },
         child: MaterialApp.router(

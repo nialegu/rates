@@ -23,6 +23,9 @@ class RatesBloc extends Bloc<RatesEvent, RatesState> {
     on<RatesEvent>(_onEvent);
   }
 
+  void pauseStream() => _fetchDataPeriodicSubscription.pause();
+  void resumeStream() => _fetchDataPeriodicSubscription.resume();
+
   _onEvent(RatesEvent event, Emitter<RatesState> emit) async {
     await event.when(
       started: () async {
@@ -33,10 +36,22 @@ class RatesBloc extends Bloc<RatesEvent, RatesState> {
         }).catchError((error) {
           debugPrint("Fetch rates error: ${error.toString()}");
           emit(RatesState.fetchFailed(error));
+          add(const RatesEvent.reloadStarted());
         }).whenComplete(() {
           _fetchDataPeriodicSubscription =
               Stream.periodic(const Duration(seconds: 30), (_) {})
                   .listen((_) => add(const RatesEvent.update()));
+        });
+      },
+      reloadStarted: () async {
+        emit(const RatesState.loading());
+        await _ratesRepository.fetchIterable().then((rates) {
+          _cachedRates = rates.toList();
+          emit(RatesState.initial(rates.toList()));
+        }).catchError((error) {
+          debugPrint("Fetch rates error: ${error.toString()}");
+          emit(RatesState.fetchFailed(error));
+          add(const RatesEvent.reloadStarted());
         });
       },
       update: () async {
