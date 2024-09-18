@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/constants/prefs_string_constants.dart';
 import '../data/constants/routing_string_constants.dart';
-import '../presentation/core/screens/loader_screen.dart';
+import '../presentation/core/screens/loader.dart';
 import '../presentation/core/screens/root_screen.dart';
 import '../presentation/features/authorization/authorization_screen.dart';
 
