@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,6 +8,8 @@ import '../data/constants/routing_string_constants.dart';
 import '../presentation/core/screens/loader.dart';
 import '../presentation/core/screens/root_screen.dart';
 import '../presentation/features/authorization/authorization_screen.dart';
+import '../presentation/features/rates/bloc/rates_bloc.dart';
+import '../presentation/features/rates/rates_screen.dart';
 
 part 'base_routes/auth_routes.dart';
 part 'base_routes/loader_routes.dart';
@@ -24,8 +27,24 @@ class AppRouter {
       _authRoutes(prefs),
       _loaderRoutes,
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) =>
-            RootScreen(navigationShell: navigationShell),
+        pageBuilder: (context, state, navigationShell) =>
+            _buildPageWithDefaultTransition(
+                context: context,
+                state: state,
+                child: RootScreen(navigationShell: navigationShell)),
+        redirect: (context, routerState) async {
+          if (routerState.fullPath != RoutingStringConstants.ratesPath) {
+            return null;
+          }
+          final ratesBloc = context.read<RatesBloc>();
+          return ratesBloc.state.maybeWhen(
+            canPushRatesPage: (_) => RoutingStringConstants.ratesPath,
+            orElse: () {
+              ratesBloc.add(const RatesEvent.started());
+              return RoutingStringConstants.loaderPath;
+            },
+          );
+        },
         branches: [
           _ratesRoutes,
           _convertRoutes,

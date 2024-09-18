@@ -5,7 +5,7 @@ final _ratesRoutes = StatefulShellBranch(
     GoRoute(
       path: RoutingStringConstants.ratesPath,
       name: RoutingStringConstants.ratesName,
-      builder: (context, state) => const Placeholder(),
+      builder: (context, routerState) => const RatesScreen(),
     )
   ],
 );

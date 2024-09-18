@@ -27,12 +27,12 @@ class RootScreen extends StatelessWidget {
 
   List<BottomNavigationBarItem> get _bottomNavigationBarItems => [
         const BottomNavigationBarItem(
-          icon: Icon(Icons.abc),
-          label: "",
+          icon: Icon(Icons.currency_exchange),
+          label: "Rates",
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.ac_unit),
-          label: "",
+          icon: Icon(Icons.swap_horiz_rounded),
+          label: "Convert",
         ),
       ];
 }
