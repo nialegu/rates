@@ -9,6 +9,7 @@ part 'text_selection_theme.dart';
 part 'elevated_button_theme.dart';
 part 'bottom_navigation_bar_theme.dart';
 part 'app_bar_theme.dart';
+part 'text_button_theme.dart';
 
 final theme = ThemeData(
   useMaterial3: true,
@@ -20,5 +21,6 @@ final theme = ThemeData(
   elevatedButtonTheme: _elevatedButtonTheme,
   bottomNavigationBarTheme: _bottomNavigationBarTheme,
   appBarTheme: _appBarTheme,
+  textButtonTheme: _textButtonTheme,
   splashColor: AppColors.blue.withOpacity(0.25),
 );

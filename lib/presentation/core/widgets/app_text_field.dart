@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../utils/app_colors.dart';
 
@@ -8,14 +9,23 @@ class AppTextFormField extends StatefulWidget {
   final String? Function(String? value)? validator;
   final bool? needObscure;
   final String? errorText;
+  final Widget? trailing;
+  final bool readOnly;
+  final Function()? onTap;
+  final TextInputType? keyboardType;
 
-  const AppTextFormField(
-      {super.key,
-      required this.labelText,
-      required this.textEditingController,
-      this.validator,
-      this.needObscure,
-      this.errorText});
+  const AppTextFormField({
+    super.key,
+    required this.labelText,
+    required this.textEditingController,
+    this.validator,
+    this.needObscure,
+    this.errorText,
+    this.trailing,
+    this.readOnly = false,
+    this.onTap,
+    this.keyboardType,
+  });
 
   @override
   State<AppTextFormField> createState() => _AppTextFormFieldState();
@@ -67,6 +77,13 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
         ),
         Stack(children: [
           TextFormField(
+            onTap: widget.onTap,
+            keyboardType: widget.keyboardType,
+            inputFormatters: [
+              if (widget.keyboardType == TextInputType.number)
+                FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))
+            ],
+            readOnly: widget.readOnly,
             autovalidateMode: AutovalidateMode.onUnfocus,
             controller: widget.textEditingController,
             validator: widget.validator,
@@ -84,34 +101,40 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
             },
             decoration: InputDecoration(
               errorText: errorText,
+              suffix: widget.trailing,
+              focusedBorder: widget.readOnly
+                  ? Theme.of(context).inputDecorationTheme.enabledBorder
+                  : null,
             ),
           ),
-          Positioned(
-            right: 10,
-            top: errorText == null ? 15 : 0,
-            bottom: errorText == null ? 15 : 20,
-            child: Visibility(
-              visible: widget.needObscure == true || isClearIconVisible,
-              child: widget.needObscure == null
-                  ? InkWell(
-                      borderRadius: BorderRadius.circular(50),
-                      onTap: () => setState(() {
-                        widget.textEditingController.clear();
-                        errorText = null;
-                      }),
-                      child: const Icon(
-                        Icons.clear,
+          if (widget.trailing == null)
+          //TODO
+            Positioned(
+              right: 10,
+              top: errorText == null ? 15 : 0,
+              bottom: errorText == null ? 15 : 20,
+              child: Visibility(
+                visible: widget.needObscure == true || isClearIconVisible,
+                child: widget.needObscure == null
+                    ? InkWell(
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: () => setState(() {
+                          widget.textEditingController.clear();
+                          errorText = null;
+                        }),
+                        child: const Icon(
+                          Icons.clear,
+                        ),
+                      )
+                    : InkWell(
+                        borderRadius: BorderRadius.circular(50),
+                        onTap: () => setState(() => isObscured = !isObscured),
+                        child: Icon(
+                          isObscured ? Icons.visibility : Icons.visibility_off,
+                        ),
                       ),
-                    )
-                  : InkWell(
-                      borderRadius: BorderRadius.circular(50),
-                      onTap: () => setState(() => isObscured = !isObscured),
-                      child: Icon(
-                        isObscured ? Icons.visibility : Icons.visibility_off,
-                      ),
-                    ),
-            ),
-          )
+              ),
+            )
         ]),
       ],
     );
