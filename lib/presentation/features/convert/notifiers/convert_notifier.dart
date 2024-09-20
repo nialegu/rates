@@ -6,64 +6,80 @@ import '../../../../data/entities/rate.dart';
 
 class ConvertNotifier extends ChangeNotifier {
   List<Rate> _rates;
-  final convertFromTextController = TextEditingController();
-  final convertToTextController = TextEditingController();
+  final convertTextControllerFROM = TextEditingController();
+  final convertTextControllerTO = TextEditingController();
   final amountController = TextEditingController();
 
-  late FixedExtentScrollController pickerFromController;
-  late FixedExtentScrollController pickerToController;
+  late FixedExtentScrollController pickerControllerFROM;
+  late FixedExtentScrollController pickerControllerTO;
 
-  late Rate _fromRate;
-  late Rate _toRate;
+  late Rate _rateFROM;
+  late Rate _rateTO;
   late String amount;
 
   ConvertNotifier(this._rates) {
     if (_rates.length >= 2) {
-      fromRate = rates.first;
-      toRate = rates[1];
+      rateFROM = rates.first;
+      rateTO = rates[1];
     }
     amountController.text = "0.00";
   }
 
   set rates(List<Rate> rates) {
     _rates = rates;
+    updateRateFROM();
+    updateRateTO();
     notifyListeners();
   }
 
   List<Rate> get rates => _rates;
 
-  set fromRate(Rate rate) {
-    _fromRate = rate;
-    pickerFromController =
-        FixedExtentScrollController(initialItem: findRateIndex(fromRate));
-    convertFromTextController.text = rate.symbol;
+  set rateFROM(Rate rate) {
+    _rateFROM = rate;
+    pickerControllerFROM =
+        FixedExtentScrollController(initialItem: findRateIndex(rateFROM));
+    convertTextControllerFROM.text = rate.symbol;
   }
 
-  Rate get fromRate => _fromRate;
+  Rate get rateFROM => _rateFROM;
 
-  set toRate(Rate rate) {
-    _toRate = rate;
-    pickerToController =
-        FixedExtentScrollController(initialItem: findRateIndex(toRate));
-    convertToTextController.text = rate.symbol;
+  set rateTO(Rate rate) {
+    _rateTO = rate;
+    pickerControllerTO =
+        FixedExtentScrollController(initialItem: findRateIndex(rateTO));
+    convertTextControllerTO.text = rate.symbol;
   }
 
-  Rate get toRate => _toRate;
+  Rate get rateTO => _rateTO;
 
-  void selectFromRate(List<Rate> cachedRates) {
-    fromRate = rates.firstWhere(
-      (e) => cachedRates[pickerFromController.selectedItem].id == e.id,
-      orElse: () => cachedRates[pickerFromController.selectedItem],
+  void selectRateFROM(List<Rate> cachedRates) {
+    rateFROM = rates.firstWhere(
+      (e) => cachedRates[pickerControllerFROM.selectedItem].id == e.id,
+      orElse: () => cachedRates[pickerControllerFROM.selectedItem],
     );
   }
 
-  void selectToRate(List<Rate> cachedRates) {
-    toRate = rates.firstWhere(
-      (e) => cachedRates[pickerToController.selectedItem].id == e.id,
-      orElse: () => cachedRates[pickerToController.selectedItem],
+  void selectRateTO(List<Rate> cachedRates) {
+    rateTO = rates.firstWhere(
+      (e) => cachedRates[pickerControllerTO.selectedItem].id == e.id,
+      orElse: () => cachedRates[pickerControllerTO.selectedItem],
     );
   }
 
   int findRateIndex(Rate rate) =>
       _rates.indexOf(_rates.firstWhere((e) => e.id == rate.id));
+
+  void updateRateFROM() {
+    rateFROM = rates.firstWhere(
+      (e) => e.id == rateFROM.id,
+      orElse: () => rateFROM,
+    );
+  }
+
+  void updateRateTO() {
+    rateTO = rates.firstWhere(
+      (e) => e.id == rateTO.id,
+      orElse: () => rateTO,
+    );
+  }
 }
