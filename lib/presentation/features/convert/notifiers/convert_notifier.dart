@@ -6,6 +6,10 @@ import '../../../../data/entities/rate.dart';
 
 class ConvertNotifier extends ChangeNotifier {
   List<Rate> _rates;
+
+  // Magic number
+  final double commissionPercent = 3.0;
+
   final convertTextControllerFROM = TextEditingController();
   final convertTextControllerTO = TextEditingController();
   final amountController = TextEditingController();
@@ -15,7 +19,9 @@ class ConvertNotifier extends ChangeNotifier {
 
   late Rate _rateFROM;
   late Rate _rateTO;
-  late String amount;
+  double _amountFROM = 0;
+  double _amountTO = 0;
+  double _result = 0;
 
   ConvertNotifier(this._rates) {
     if (_rates.length >= 2) {
@@ -23,13 +29,20 @@ class ConvertNotifier extends ChangeNotifier {
       rateTO = rates[1];
     }
     amountController.text = "0.00";
+    // TODO add processing handler for bid calculatings
+    amountController.addListener(() => calculateResult());
+  }
+
+  void update() {
+    updateRateFROM();
+    updateRateTO();
+    calculateResult();
+    notifyListeners();
   }
 
   set rates(List<Rate> rates) {
     _rates = rates;
-    updateRateFROM();
-    updateRateTO();
-    notifyListeners();
+    update();
   }
 
   List<Rate> get rates => _rates;
@@ -57,6 +70,7 @@ class ConvertNotifier extends ChangeNotifier {
       (e) => cachedRates[pickerControllerFROM.selectedItem].id == e.id,
       orElse: () => cachedRates[pickerControllerFROM.selectedItem],
     );
+    notifyListeners();
   }
 
   void selectRateTO(List<Rate> cachedRates) {
@@ -64,6 +78,7 @@ class ConvertNotifier extends ChangeNotifier {
       (e) => cachedRates[pickerControllerTO.selectedItem].id == e.id,
       orElse: () => cachedRates[pickerControllerTO.selectedItem],
     );
+    notifyListeners();
   }
 
   int findRateIndex(Rate rate) =>
@@ -81,5 +96,17 @@ class ConvertNotifier extends ChangeNotifier {
       (e) => e.id == rateTO.id,
       orElse: () => rateTO,
     );
+  }
+
+  double get amountFROM => _amountFROM;
+  double get amountTO => _amountTO;
+  double get result => _result;
+
+  void calculateResult() {
+    _amountFROM = double.tryParse(amountController.text) ?? 0;
+    final amountFROMUsd = _amountFROM * double.parse(rateFROM.rateUsd);
+    _amountTO = amountFROMUsd / double.parse(rateTO.rateUsd);
+    _result = amountTO * (1 + commissionPercent / 100);
+    notifyListeners();
   }
 }

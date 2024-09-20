@@ -5,6 +5,7 @@ import '../../core/utils/app_colors.dart';
 import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/logout_button.dart';
 import 'notifiers/convert_notifier.dart';
+import 'widgets/convertation_result.dart';
 import 'widgets/currency_picker.dart';
 
 class ConvertScreen extends StatelessWidget {
@@ -66,6 +67,8 @@ class ConvertScreen extends StatelessWidget {
                 color: AppColors.greyLight,
               ),
             ),
+            // TODO add a limit on the number of decimal places and change the empty to 0.00
+            // TODO remove validation
             AppTextFormField(
               labelText: "Amount",
               textEditingController: convertNotifier.amountController,
@@ -76,6 +79,15 @@ class ConvertScreen extends StatelessWidget {
                 }
                 return null;
               },
+            ),
+            const SizedBox(height: 20),
+            ConvertationResult(
+              rateFROM: convertNotifier.rateFROM.symbol,
+              rateTO: convertNotifier.rateTO.symbol,
+              amountFROM: convertNotifier.amountFROM.toStringAsFixed(2),
+              amountTO: convertNotifier.amountTO.toStringAsFixed(2),
+              commissionPercent: convertNotifier.commissionPercent,
+              result: convertNotifier.result.toStringAsFixed(2),
             ),
           ],
         ),
