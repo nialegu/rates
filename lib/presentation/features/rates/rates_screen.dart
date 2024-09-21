@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/screens/loader_screen.dart';
 import '../../core/utils/app_colors.dart';
@@ -32,12 +33,7 @@ class RatesScreen extends StatelessWidget {
               leading: BlocBuilder<RatesBloc, RatesState>(
                 builder: (context, state) {
                   return IconButton(
-                    icon: Icon(
-                      Icons.update_rounded,
-                      color: state.whenOrNull(
-                        loading: () => AppColors.grey,
-                      ),
-                    ),
+                    icon: SvgPicture.asset("assets/images/refresh.svg"),
                     onPressed: () => state.maybeWhen(
                       orElse: () => context
                           .read<RatesBloc>()

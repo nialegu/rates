@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../data/constants/routing_string_constants.dart';
@@ -23,7 +24,7 @@ class LogoutButton extends StatelessWidget {
       },
       builder: (context, state) => IconButton(
         icon: state.maybeWhen(
-            orElse: () => const Icon(Icons.exit_to_app_rounded),
+            orElse: () => SvgPicture.asset("assets/images/logout.svg"),
             loading: () => const CustomLoader(
                   raduis: 10,
                 )),

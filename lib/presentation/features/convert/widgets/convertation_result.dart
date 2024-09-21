@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/utils/app_colors.dart';
 
@@ -33,9 +34,9 @@ class ConvertationResult extends StatelessWidget {
             "$amountFROM $rateFROM",
             style: Theme.of(context).textTheme.bodyLarge,
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 15),
-            child: Icon(Icons.swap_horiz),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: SvgPicture.asset("assets/images/convert.svg"),
           ),
           Text(
             "$result $rateTO",

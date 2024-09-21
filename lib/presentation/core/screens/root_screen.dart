@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+
+import '../utils/app_colors.dart';
 
 class RootScreen extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -26,12 +29,34 @@ class RootScreen extends StatelessWidget {
   }
 
   List<BottomNavigationBarItem> get _bottomNavigationBarItems => [
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.currency_exchange),
+        BottomNavigationBarItem(
+          icon: Padding(
+            padding: const EdgeInsets.all(5),
+            child: SvgPicture.asset(
+              "assets/images/rates.svg",
+              colorFilter: ColorFilter.mode(
+                navigationShell.currentIndex == 0
+                    ? AppColors.blue
+                    : AppColors.black,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
           label: "Rates",
         ),
-        const BottomNavigationBarItem(
-          icon: Icon(Icons.swap_horiz_rounded),
+        BottomNavigationBarItem(
+          icon: Padding(
+            padding: const EdgeInsets.all(5),
+            child: SvgPicture.asset(
+              "assets/images/convert.svg",
+              colorFilter: ColorFilter.mode(
+                navigationShell.currentIndex == 1
+                    ? AppColors.blue
+                    : AppColors.black,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
           label: "Convert",
         ),
       ];
