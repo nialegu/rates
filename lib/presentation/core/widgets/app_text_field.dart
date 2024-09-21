@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../utils/app_colors.dart';
+import '../utils/money_input_formatter.dart';
 
 class AppTextFormField extends StatefulWidget {
   final String labelText;
@@ -81,7 +82,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
             keyboardType: widget.keyboardType,
             inputFormatters: [
               if (widget.keyboardType == TextInputType.number)
-                FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))
+                MoneyInputFormatter()
             ],
             readOnly: widget.readOnly,
             autovalidateMode: AutovalidateMode.onUnfocus,
@@ -108,7 +109,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
             ),
           ),
           if (widget.trailing == null)
-          //TODO
+            //TODO
             Positioned(
               right: 10,
               top: errorText == null ? 15 : 0,

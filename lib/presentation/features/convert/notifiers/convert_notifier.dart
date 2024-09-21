@@ -29,7 +29,6 @@ class ConvertNotifier extends ChangeNotifier {
       rateTO = rates[1];
     }
     amountController.text = "0.00";
-    // TODO add processing handler for bid calculatings
     amountController.addListener(() => calculateResult());
   }
 
