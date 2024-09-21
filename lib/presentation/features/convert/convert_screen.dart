@@ -80,15 +80,13 @@ class ConvertScreen extends StatelessWidget {
                     color: AppColors.greyLight,
                   ),
                 ),
-                // TODO add a limit on the number of decimal places and change the empty to 0.00
-                // TODO remove validation
                 AppTextFormField(
                   labelText: "Amount",
                   textEditingController: convertNotifier.amountController,
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Enter amount";
+                      convertNotifier.amountController.text = "0.00";
                     }
                     return null;
                   },

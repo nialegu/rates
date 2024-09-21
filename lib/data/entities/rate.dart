@@ -21,9 +21,18 @@ class Rate {
         rateUsd: json['rateUsd'],
       );
 
+  @override
+  bool operator ==(Object other) {
+    return other is Rate && id == other.id;
+  }
+  @override
+  int get hashCode => id.hashCode;
+
   // TODO find any resourses to pull logos
-  String get imagePath => "https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png";
-  String get alternateImagePath => "https://cryptologos.cc/logos/thumbs/$id.png";
+  String get imagePath =>
+      "https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png";
+  String get alternateImagePath =>
+      "https://cryptologos.cc/logos/thumbs/$id.png";
 
   String get shortCourseUsd => rateUsd.substring(0, 12);
 }

@@ -17,16 +17,18 @@ class ConvertNotifier extends ChangeNotifier {
   late FixedExtentScrollController pickerControllerFROM;
   late FixedExtentScrollController pickerControllerTO;
 
-  late Rate _rateFROM;
-  late Rate _rateTO;
+  Rate _rateFROM;
+  Rate _rateTO;
   double _amountFROM = 0;
   double _amountTO = 0;
   double _result = 0;
 
-  ConvertNotifier(this._rates) {
+  ConvertNotifier(this._rates)
+      : _rateFROM = _rates.first,
+        _rateTO = _rates[1] {
     if (_rates.length >= 2) {
-      rateFROM = rates.first;
-      rateTO = rates[1];
+      rateFROM = _rateFROM;
+      rateTO = _rateTO;
     }
     amountController.text = "0.00";
     amountController.addListener(() => calculateResult());
@@ -69,7 +71,7 @@ class ConvertNotifier extends ChangeNotifier {
       (e) => cachedRates[pickerControllerFROM.selectedItem].id == e.id,
       orElse: () => cachedRates[pickerControllerFROM.selectedItem],
     );
-    notifyListeners();
+    calculateResult();
   }
 
   void selectRateTO(List<Rate> cachedRates) {
@@ -77,7 +79,7 @@ class ConvertNotifier extends ChangeNotifier {
       (e) => cachedRates[pickerControllerTO.selectedItem].id == e.id,
       orElse: () => cachedRates[pickerControllerTO.selectedItem],
     );
-    notifyListeners();
+    calculateResult();
   }
 
   int findRateIndex(Rate rate) =>

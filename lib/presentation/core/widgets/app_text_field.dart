@@ -122,6 +122,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
                         onTap: () => setState(() {
                           widget.textEditingController.clear();
                           errorText = null;
+                          focusNode.requestFocus();
                         }),
                         child: const Icon(
                           Icons.clear,
