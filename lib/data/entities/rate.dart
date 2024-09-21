@@ -31,7 +31,6 @@ class Rate {
   @override
   int get hashCode => id.hashCode;
 
-  // TODO find any resourses to pull logos
   String get imagePath =>
       "https://assets.coincap.io/assets/icons/${symbol.toLowerCase()}@2x.png";
   String get alternateImagePath =>
