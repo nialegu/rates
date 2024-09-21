@@ -49,10 +49,13 @@ class ConvertNotifier extends ChangeNotifier {
 
   List<Rate> get rates => _rates;
 
+  List<Rate> get ratesFROM => rates.where((e) => e != rateTO).toList();
+  List<Rate> get ratesTO => rates.where((e) => e != rateFROM).toList();
+
   set rateFROM(Rate rate) {
     _rateFROM = rate;
     pickerControllerFROM =
-        FixedExtentScrollController(initialItem: findRateIndex(rateFROM));
+        FixedExtentScrollController(initialItem: findRateIndex(rateFROM, ratesFROM));
     convertTextControllerFROM.text = rate.symbol;
   }
 
@@ -61,7 +64,7 @@ class ConvertNotifier extends ChangeNotifier {
   set rateTO(Rate rate) {
     _rateTO = rate;
     pickerControllerTO =
-        FixedExtentScrollController(initialItem: findRateIndex(rateTO));
+        FixedExtentScrollController(initialItem: findRateIndex(rateTO, ratesTO));
     convertTextControllerTO.text = rate.symbol;
   }
 
@@ -83,9 +86,6 @@ class ConvertNotifier extends ChangeNotifier {
     calculateResult();
   }
 
-  int findRateIndex(Rate rate) =>
-      _rates.indexOf(_rates.firstWhere((e) => e.id == rate.id));
-
   void updateRateFROM() {
     rateFROM = rates.firstWhere(
       (e) => e.id == rateFROM.id,
@@ -99,6 +99,9 @@ class ConvertNotifier extends ChangeNotifier {
       orElse: () => rateTO,
     );
   }
+
+  int findRateIndex(Rate rate, List<Rate> neededRates) =>
+      neededRates.indexOf(neededRates.firstWhere((e) => e.id == rate.id));
 
   double get amountFROM => _amountFROM;
   double get amountTO => _amountTO;

@@ -47,9 +47,9 @@ class ConvertScreen extends StatelessWidget {
                     useRootNavigator: true,
                     shape: const Border(),
                     builder: (context) => CurrencyPicker(
-                      rates: convertNotifier.rates,
+                      rates: convertNotifier.ratesFROM,
                       onRateConfirmed: () =>
-                          convertNotifier.selectRateFROM(convertNotifier.rates),
+                          convertNotifier.selectRateFROM(convertNotifier.ratesFROM),
                       pickerController: convertNotifier.pickerControllerFROM,
                     ),
                   ),
@@ -67,9 +67,9 @@ class ConvertScreen extends StatelessWidget {
                     useRootNavigator: true,
                     shape: const Border(),
                     builder: (context) => CurrencyPicker(
-                      rates: convertNotifier.rates,
+                      rates: convertNotifier.ratesTO,
                       onRateConfirmed: () =>
-                          convertNotifier.selectRateTO(convertNotifier.rates),
+                          convertNotifier.selectRateTO(convertNotifier.ratesTO),
                       pickerController: convertNotifier.pickerControllerTO,
                     ),
                   ),
