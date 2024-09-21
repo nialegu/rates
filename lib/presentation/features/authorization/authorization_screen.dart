@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/utils/app_colors.dart';
+import '../../core/widgets/custom_loader.dart';
 import '../rates/bloc/rates_bloc.dart';
 import '/data/constants/routing_string_constants.dart';
 import '../../core/widgets/app_text_field.dart';
@@ -38,83 +40,80 @@ class AuthorizationScreen extends StatelessWidget {
                   child: Center(
                     heightFactor: 0.85,
                     child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              return Align(alignment:constraints.maxWidth > 600 ? Alignment.center : Alignment.centerLeft,
-                                child: Text(
-                                  "Welcome back!",
-                                  style: Theme.of(context).textTheme.displayLarge,
-                                ),
-                              );
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        LayoutBuilder(builder: (context, constraints) {
+                          return Align(
+                            alignment: constraints.maxWidth > 600
+                                ? Alignment.center
+                                : Alignment.centerLeft,
+                            child: Text(
+                              "Welcome back!",
+                              style: Theme.of(context).textTheme.displayLarge,
+                            ),
+                          );
+                        }),
+                        const SizedBox(height: 50),
+                        AppTextFormField(
+                          labelText: "Login",
+                          textEditingController: _loginController,
+                          validator: (value) {
+                            if (value == null) {
+                              return "Please, fill this field";
                             }
-                          ),
-                          const SizedBox(height: 50),
-                          AppTextFormField(
-                            labelText: "Login",
-                            textEditingController: _loginController,
-                            validator: (value) {
-                              if (value == null) {
-                                return "Please, fill this field";
-                              }
-                              if (value.isEmpty || value.length < 3) {
-                                return "Please, fill this field";
-                              }
-                              return null;
-                            },
-                            errorText: state.whenOrNull(
-                                authFailed: (error) => error.toString()),
-                          ),
-                          const SizedBox(height: 25),
-                          AppTextFormField(
-                            labelText: "Password",
-                            textEditingController: _passwordController,
-                            needObscure: true,
-                            validator: (value) {
-                              if (value == null) {
-                                return "Please, fill this field";
-                              }
-                              if (value.isEmpty || value.length < 3) {
-                                return "Please, fill this field";
-                              }
-                              return null;
-                            },
-                            errorText: state.whenOrNull(
-                                authFailed: (error) => error.toString()),
-                          ),
-                          const SizedBox(height: 35),
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              return SizedBox(
-                                width: constraints.maxWidth > 600 ? 400 : null,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      context.read<AuthorizationBloc>().add(
-                                          AuthorizationEvent.loggingIn(
-                                              _loginController.text,
-                                              _passwordController.text));
-                                      FocusScope.of(context)
-                                          .requestFocus(FocusNode());
-                                    }
-                                  },
-                                  child: state.maybeWhen(
-                                    orElse: () => const Text("Sign in"),
-                                    loading: () => const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: Center(
-                                          child: CircularProgressIndicator()),
-                                    ),
-                                  ),
-                                ),
-                              );
+                            if (value.isEmpty || value.length < 3) {
+                              return "Please, fill this field";
                             }
-                          ),
-                        ],
-                      ),
+                            return null;
+                          },
+                          errorText: state.whenOrNull(
+                              authFailed: (error) => error.toString()),
+                        ),
+                        const SizedBox(height: 25),
+                        AppTextFormField(
+                          labelText: "Password",
+                          textEditingController: _passwordController,
+                          needObscure: true,
+                          validator: (value) {
+                            if (value == null) {
+                              return "Please, fill this field";
+                            }
+                            if (value.isEmpty || value.length < 3) {
+                              return "Please, fill this field";
+                            }
+                            return null;
+                          },
+                          errorText: state.whenOrNull(
+                              authFailed: (error) => error.toString()),
+                        ),
+                        const SizedBox(height: 35),
+                        LayoutBuilder(builder: (context, constraints) {
+                          return SizedBox(
+                            width: constraints.maxWidth > 600 ? 400 : null,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  context.read<AuthorizationBloc>().add(
+                                      AuthorizationEvent.loggingIn(
+                                          _loginController.text,
+                                          _passwordController.text));
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
+                                }
+                              },
+                              child: state.maybeWhen(
+                                orElse: () => const Text("Sign in"),
+                                loading: () => const CustomLoader(
+                                  raduis: 10,
+                                  colorSeed: AppColors.white,
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
                   ),
                 );
               },
