@@ -37,7 +37,7 @@ class RateTile extends StatelessWidget {
       ),
       title: Text(rate.symbol),
       trailing: Text(
-        "\$${rate.shortCourseUsd}",
+        "\$${rate.coursePreservationAccuracy}",
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontSize: 16,
             ),
