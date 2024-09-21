@@ -102,19 +102,16 @@ class ConvertNotifier extends ChangeNotifier {
 
   double get amountFROM => _amountFROM;
   double get amountTO => _amountTO;
-  String get result {
-    if (rateFROM.type == RateType.fiat) {
-      final roundedValue = (_result * 100).floorToDouble() / 100;
-      return roundedValue.toString();
-    }
-    return _result.toStringAsFixed(2);
-  }
+  String get result => _result.toStringAsFixed(2);
 
   void calculateResult() {
     _amountFROM = double.tryParse(amountController.text) ?? 0;
     final amountFROMUsd = _amountFROM * double.parse(rateFROM.rateUsd);
     _amountTO = amountFROMUsd / double.parse(rateTO.rateUsd);
     _result = amountTO * (1 + commissionPercent / 100);
+    if (rateFROM.type == RateType.fiat) {
+      _result = (_result * 100).floorToDouble() / 100;
+    }
     notifyListeners();
   }
 }
