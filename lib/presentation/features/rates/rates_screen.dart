@@ -33,7 +33,16 @@ class RatesScreen extends StatelessWidget {
               leading: BlocBuilder<RatesBloc, RatesState>(
                 builder: (context, state) {
                   return IconButton(
-                    icon: SvgPicture.asset("assets/images/refresh.svg"),
+                    icon: SvgPicture.asset(
+                      "assets/images/refresh.svg",
+                      colorFilter: ColorFilter.mode(
+                        state.maybeWhen(
+                          orElse: () => AppColors.blue,
+                          loading: () => AppColors.grey,
+                        ),
+                        BlendMode.srcIn,
+                      ),
+                    ),
                     onPressed: () => state.maybeWhen(
                       orElse: () => context
                           .read<RatesBloc>()
