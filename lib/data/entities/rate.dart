@@ -1,8 +1,10 @@
+import '../enums/rate_type.dart';
+
 class Rate {
   final String id;
   final String symbol;
   final String? currencySymbol;
-  final String type;
+  final RateType type;
   final String rateUsd;
 
   Rate({
@@ -17,7 +19,7 @@ class Rate {
         id: json['id'],
         symbol: json['symbol'],
         currencySymbol: json['currencySymbol'],
-        type: json['type'],
+        type: RateType.fromString(json['type']),
         rateUsd: json['rateUsd'],
       );
 

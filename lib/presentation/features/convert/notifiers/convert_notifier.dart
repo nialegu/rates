@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../data/entities/rate.dart';
+import '../../../../data/enums/rate_type.dart';
 
 class ConvertNotifier extends ChangeNotifier {
   List<Rate> _rates;
@@ -101,7 +102,13 @@ class ConvertNotifier extends ChangeNotifier {
 
   double get amountFROM => _amountFROM;
   double get amountTO => _amountTO;
-  double get result => _result;
+  String get result {
+    if (rateFROM.type == RateType.fiat) {
+      final roundedValue = (_result * 100).floorToDouble() / 100;
+      return roundedValue.toString();
+    }
+    return _result.toStringAsFixed(2);
+  }
 
   void calculateResult() {
     _amountFROM = double.tryParse(amountController.text) ?? 0;

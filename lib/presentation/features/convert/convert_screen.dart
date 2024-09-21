@@ -98,7 +98,7 @@ class ConvertScreen extends StatelessWidget {
                   amountFROM: convertNotifier.amountFROM.toStringAsFixed(2),
                   amountTO: convertNotifier.amountTO.toStringAsFixed(2),
                   commissionPercent: convertNotifier.commissionPercent,
-                  result: convertNotifier.result.toStringAsFixed(2),
+                  result: convertNotifier.result,
                 ),
               ],
             ),
